@@ -1,0 +1,245 @@
+#include <vcl.h>
+#pragma hdrstop
+#include "Mandelbar.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+: TForm(Owner)
+{
+}
+ 
+#define MIN(a,b) ((a<b)?a:b)
+#define MAX(a,b) ((a>b)?a:b)
+ 
+//---------------------------------------------------------------------------
+//Describes places to render
+double ratioX, ratioY;
+double minX, minY, maxX, maxY;
+int downX, downY;
+//colors
+typedef struct RGBColors
+{
+Byte r;
+Byte g;
+Byte b;
+} TRGBColors;
+TRGBColors colors[121];
+//---------------------------------------------------------------------------
+ 
+//for HSV colors
+void HSV2RGB(float hue, float sat, float val, float &red, float &grn, float &blu)
+{
+int i;
+float f, p, q, t;
+if(val==0) {red=0; grn=0; blu=0;}
+else{
+hue/=60;
+i = (int)(hue);
+f = hue-i;
+p = val*(1-sat);
+q = val*(1-(sat*f));
+t = val*(1-(sat*(1-f)));
+if (i==0) {red=val; grn=t; blu=p;}
+else if (i==1) {red=q; grn=val; blu=p;}
+else if (i==2) {red=p; grn=val; blu=t;}
+else if (i==3) {red=p; grn=q; blu=val;}
+else if (i==4) {red=t; grn=p; blu=val;}
+else if (i==5) {red=val; grn=p; blu=q;}
+}
+}
+ 
+//initialize array with colors used to color different levels
+void initializeColors()
+{
+int level;
+float r, g, b;
+ 
+for (level=0; level<120; level++)
+{
+HSV2RGB(2.6*level, 0.85, 0.6, r, g, b);
+colors[level].r = (int)(r*255);
+colors[level].g = (int)(g*255);
+colors[level].b = (int)(b*255);
+}
+colors[120].r = 0;
+colors[120].g = 0;
+colors[120].b = 0;
+}
+ 
+//type for complex numbers
+typedef struct complex_type
+{
+double real;
+double imaginary;
+} complex_t;
+ 
+//calculate squared modus of given complex c
+double complexModSq(complex_t c)
+{
+return c.real*c.real + c.imaginary*c.imaginary;
+}
+ 
+//function z[0]=0
+complex_t f(complex_t p)
+{
+p.real = 0;
+p.imaginary = 0;
+return p;
+}
+ 
+//calculates z^level
+complex_t power(complex_t z, int level)
+{
+complex_t result, tmp;
+int i;
+ 
+result = z;
+for (i=1; i<level; i++)
+{
+tmp.real = result.real*z.real - result.imaginary*z.imaginary;
+tmp.imaginary = result.real*z.imaginary + result.imaginary*z.real;
+result = tmp;
+}
+ 
+return result;
+}
+ 
+//function z[n+1] = conjugate(z[n]^level) + p
+complex_t g(complex_t z, int level, complex_t p)
+{
+complex_t result;
+result = power(z, level);
+result.real += p.real;
+result.imaginary = -result.imaginary + p.imaginary;
+return result;
+}
+ 
+//value is inside set in the returned level
+int levelSet(complex_t p, int level)
+{
+complex_t z;
+int iteration;
+ 
+iteration = 0;
+z = f(p);
+ 
+do
+{
+z = g(z, level, p);
+iteration++;
+} while (complexModSq(z) < 4 && iteration < 120);
+ 
+return iteration;
+}
+ 
+//generate fractal
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+int i, j, level, powLevel;
+complex_t p;
+Byte *pixel;
+ 
+minX = StrToFloat(minx->Text);
+minY = StrToFloat(miny->Text);
+maxX = StrToFloat(maxx->Text);
+maxY = StrToFloat(maxy->Text);
+ 
+powLevel =  powerLevel->ItemIndex + 2;
+ 
+ratioX = (maxX - minX) / Fractal->Width;
+ratioY = (maxY - minY) / Fractal->Height;
+ 
+Fractal->Canvas->Brush->Color = clWhite;
+Fractal->Canvas->Rectangle(0, 0, Fractal->Width, Fractal->Height);
+Fractal->Picture->Bitmap->PixelFormat = pf32bit;
+ 
+for (i=0; i<Fractal->Height; i++)
+{
+pixel = (Byte *)Fractal->Picture->Bitmap->ScanLine[i];
+p.imaginary = i*ratioY + minY;
+for (j=0; j<Fractal->Width; j++)
+{
+p.real = j*ratioX + minX;
+level = levelSet(p, powLevel);
+*pixel = colors[level].b;
+pixel++;
+*pixel = colors[level].g;
+pixel++;
+*pixel = colors[level].r;
+pixel++;
+pixel++;
+}
+}
+Fractal->Refresh();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormCreate(TObject *Sender)
+{
+minx->Text = FloatToStr(-1.5);
+maxx->Text = FloatToStr(1.5);
+miny->Text = FloatToStr(-1.25);
+maxy->Text = FloatToStr(1.25);
+ 
+minX = StrToFloat(minx->Text);
+minY = StrToFloat(miny->Text);
+maxX = StrToFloat(maxx->Text);
+maxY = StrToFloat(maxy->Text);
+ 
+ratioX = (maxX - minX) / Fractal->Width;
+ratioY = (maxY - minY) / Fractal->Height;
+ 
+//initialize array with colors
+initializeColors();
+ 
+//render new fractal
+Button1Click(Sender);
+}
+ 
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FractalMouseDown(TObject *Sender,
+TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+downX = X;
+downY = Y;
+ 
+Selection->Width = 0;
+Selection->Height = 0;
+Selection->Visible = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FractalMouseUp(TObject *Sender,
+TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+//remove selection
+Selection->Visible = false;
+ 
+//get new range to render
+minx->Text = FloatToStr(MIN(downX, X)*ratioX + minX);
+maxx->Text = FloatToStr(MAX(downX, X)*ratioX + minX);
+miny->Text = FloatToStr(MIN(downY, Y)*ratioY + minY);
+maxy->Text = FloatToStr(MAX(downY, Y)*ratioY + minY);
+ 
+minX = StrToFloat(minx->Text);
+minY = StrToFloat(miny->Text);
+maxX = StrToFloat(maxx->Text);
+maxY = StrToFloat(maxy->Text);
+ 
+//render new fractal
+Button1Click(Sender);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FractalMouseMove(TObject *Sender,
+TShiftState Shift, int X, int Y)
+{
+//if left mouse button is held then draw selection
+if (Shift.Contains(ssLeft))
+{
+Selection->Width = abs(downX - X);
+Selection->Height = abs(downY - Y);
+Selection->Left = Fractal->Left + MIN(downX, X);
+Selection->Top = Fractal->Top + MIN(downY, Y);
+}
+}
