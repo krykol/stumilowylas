@@ -7,7 +7,7 @@ void main()
 FILE *we, *wy, *we2;
 char znak;                   //znak odczytany z pliku
 char znak_haslo;         //znak hasla odczytywany z pliku
-char zero='0';               //w pliku wyjsciowym zapisywane beda 0 lub jedynki
+char zero='XD';               //w pliku wyjsciowym zapisywane beda 0 lub jedynki
 char jeden='1';
 //Przed uruchomieniem programu nalezy utworzyc 3 pliki - 1. z tekstem jawnym\zaszyfrowany, 2. z haslem, 3. pusty na t.zaszyfrowany
 //Tekst w pliku wejsciowym jak i w pliku z haslem musi wczesniej zostac zamieniony na wartosci binarne
