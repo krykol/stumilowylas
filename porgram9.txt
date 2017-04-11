@@ -1,0 +1,45 @@
+#include<stdio.h>
+#include<iostream.h>
+#include <math.h>
+ 
+void main()
+{
+FILE *we, *wy, *we2;
+char znak;                   //znak odczytany z pliku
+char znak_haslo;         //znak hasla odczytywany z pliku
+char zero='0';               //w pliku wyjsciowym zapisywane beda 0 lub jedynki
+char jeden='1';
+//Przed uruchomieniem programu nalezy utworzyc 3 pliki - 1. z tekstem jawnym\zaszyfrowany, 2. z haslem, 3. pusty na t.zaszyfrowany
+//Tekst w pliku wejsciowym jak i w pliku z haslem musi wczesniej zostac zamieniony na wartosci binarne
+//Aby tekst zostal poprawnie zaszyfrowany a nastepnie ponownie odszyfrowany dlugosc hasla musi byc dluzsza od szyfrowanego tekstu
+char plik_wejsciowy[20];         //nazwa pliku wejsciowego
+char plik_haslo[20];         //nazwa pliku z haslem
+char plik_wyjsciowy[20];  //nazwa pliku wyjsciowego
+cout<<"Podaj nazwe pliku wejsciowego: " ;
+cin>>plik_wejsciowy;             //pobranie nazwy pliku jawnego
+cout<<"Podaj nazwe pliku z haslem: " ;
+cin>>plik_haslo;             //pobranie nazwy pliku z haslem
+cout<<"Podaj nazwe pliku wynikowego: ";
+cin>>plik_wyjsciowy;      //pobranie nazwy pliku zaszyfrowanego
+if((we=fopen(plik_wejsciowy,"rb"))!=NULL)    //otwieranie pliku 1. do odczytu - w przypadku gdy takiego pliku nie ma program nie wykona sie
+{
+if((we2=fopen(plik_haslo,"rb"))!=NULL)    //otwieranie pliku 2. do odczytu - w przypadku gdy takiego pliku nie ma program nie wykona sie
+{
+if((wy=fopen(plik_wyjsciowy,"wb"))!=NULL)  //otwieranie pliku 3. do zapisu  - w przypadku gdy takiego pliku nie ma program nie wykona sie
+{
+while((znak=getc(we))!=EOF)   //pobieranie znaku z pliku 1. tak dlugo az nie nastapi znak konca pliku
+{
+znak_haslo=getc(we2);
+if (znak_haslo==znak)   //w przypadku gdy znak z pliku wejsciowego i z hasla sa rowne to do pliku wyniowego wpisywane jest 0
+putc(zero,wy);
+else putc(jeden,wy);    //gdy znaki sa rozne to w pliku wyjsciowym wpisywana jest jedynka
+}
+fclose(wy); //zamykanie pliku wyjsciowego
+}
+fclose(we2);    //zamykanie pliku wejsciowego
+}
+fclose(we);     //zamykanie pliku wejsciowego
+}
+cout<<"Operacja zostala zakonczona";
+return;
+}
