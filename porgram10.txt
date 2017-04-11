@@ -1,0 +1,90 @@
+ 
+program Algorytm_Holt;
+ 
+uses
+Forms,
+SysUtils;
+ 
+{$R *.RES}
+{$Apptype console}
+ 
+var
+p,z,j,k,tmp: Integer;
+E : Array [0..1] of Array [1..100] of Array [1..100] of Integer;
+A : Array [1..100] of Array [1..100] of Integer;
+I,f : Array [1..100] of Integer;
+c : Array [0..100] of Integer;
+flaga: Boolean;
+ 
+begin
+writeln('Podaj liczbe procesow (max. 100)');
+readln(p);
+writeln('Podaj liczbe zasobow (max. 100)');
+readln(z);
+//pobranie danych
+for k:=1 to p do
+for j:=1 to z do
+begin
+writeln('Podaj ile zasobu '+IntToStr(j)+' posiada proces '+IntToStr(k));
+readln(A[k,j]);
+end;
+for k:=1 to p do
+for j:=1 to z do
+begin
+writeln('Podaj ile zasobu '+IntToStr(j)+' moze jeszcze zazadac proces '+IntToStr(k));
+readln(E[0,k,j]);
+E[1,k,j]:=k;
+end;
+for j:=1 to z do
+begin
+writeln('Podaj ile zasobu '+IntToStr(j)+' jest jeszcze wolne w systemie');
+readln(f[j]);
+end;
+writeln; writeln;
+//algorytm Holt'a
+//posortowanie ¿¹dañ procesów (bubble sort)
+for j:=1 to z do
+begin
+flaga:=true;
+while flaga do
+begin
+flaga:=false;
+for k:=1 to p-1 do
+if E[0,k,j]>E[0,k+1,j] then
+begin
+flaga:=true;
+tmp:=E[0,k,j];
+E[0,k,j]:=E[0,k+1,j];
+E[0,k+1,j]:=tmp;
+tmp:=E[1,k,j];
+E[1,k,j]:=E[1,k+1,j];
+E[1,k+1,j]:=tmp;
+end;
+end;
+end;
+for k:=1 to z do I[k]:=1;
+for k:=1 to p do c[k]:=z;
+c[0]:=p;
+//wlasciwa czêsc algorytmu
+repeat
+flaga:=false;
+for j:=1 to z do
+while ((I[j]<=p) and (E[0,I[j],j]<=f[j])) do
+begin
+c[E[1,I[j],j]]:=c[E[1,I[j],j]]-1;
+if c[E[1,I[j],j]]=0 then
+begin
+c[0]:=c[0]-1;
+flaga:=true;
+for k:=1 to z do
+f[k]:=f[k]+A[E[1,I[j],j],k];
+end;
+I[j]:=I[j]+1;
+end;
+until not((flaga)and(c[0]>0));
+if flaga then writeln('Nie ma zakleszczenia') else writeln('Istnieje zakleszczenie');
+write('Zbior zadan zakleszczonych: {');
+for k:=1 to p do if c[k]<>0 then write(' '+IntToStr(k));
+write(' }');
+readln;
+end.
