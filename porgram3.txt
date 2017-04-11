@@ -1,6 +1,6 @@
 public class ScalanieCiagow {
  
-private static int[] tab = {1, 5, 13, 24, 35, 48, 59, 67, 86, 94};
+private static int[] tab = {1, 5, 4, 13, 24, 35, 48, 59, 67, 86, 94};
 private static int[] tab2 = {2, 4, 11, 27, 49, 53, 64, 74, 85, 99};
 private static int[] tab_wynikowa;
  
