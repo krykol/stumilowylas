@@ -1,0 +1,75 @@
+ 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+ 
+namespace Sortowanie_babelkowe
+{
+class Program
+{
+ 
+static void Main(string[] args)
+{
+ 
+int bufor;
+bool posortowane;
+int zakres, liczba;
+string liczba1 = "nic";
+ 
+Random randomizer = new Random();               // Uzycie generator liczb losowych do uzupe³nienia tablicy, która bêdzie posortowana
+ 
+while(!Int32.TryParse(liczba1, out zakres))     //Sprawdzenie czy wpisany znak jest liczb¹, jeœli tak zwraca liczbe jako zmienn¹ zakres
+{
+Console.Write("Podaj iloœæ liczb do posortowania: ");
+liczba1 = Console.ReadLine();
+}
+ 
+int[] tab = new int[zakres];                    // deklaracja tablicy o liczbie elementów równej zmiennej zakres
+Console.WriteLine("");
+ 
+for (int i = 0; i < zakres; i++)            // uzupe³nienie tablicy liczbami losowymi
+{
+liczba = randomizer.Next(101);
+tab[i] = liczba;
+Console.Write(tab[i] + " ");            // wyœwietlenie tablicy
+}
+ 
+Console.WriteLine("");
+ 
+for (int i = 0; i < zakres - 1; i++)            // algorytm sortowania b¹belkowego
+{
+posortowane = true;
+for (int j = 0; j < zakres - 1; j++)
+{
+if (tab[j] > tab[j + 1])                // jeœli dana liczba jest wiêksza od kolejnej to zamieñ miejscami
+{
+bufor = tab[j];
+tab[j] = tab[j + 1];
+tab[j + 1] = bufor;
+posortowane = false;
+}
+}
+ 
+if (posortowane) break;                    
+Console.WriteLine();
+Console.WriteLine("Krok[{0}]", i+1);        // Wyœwietl poszczególne kroki
+ 
+for (int k = 0; k < zakres; k++)
+{
+Console.Write(tab[k] + " ");
+}
+}
+ 
+Console.WriteLine("\n");
+Console.Write("Po posortowaniu: ");             // Wyœwietl liczby po posortowaniu
+ 
+for (int i = 0; i < zakres; i++)
+{
+Console.Write(tab[i] + " ");
+}
+ 
+Console.Read();
+}
+}
+}
