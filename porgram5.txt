@@ -23,6 +23,7 @@ int downX, downY;
 typedef struct RGBColors
 {
 Byte r;
+Byte c;
 Byte g;
 Byte b;
 } TRGBColors;
