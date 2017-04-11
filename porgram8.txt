@@ -24,7 +24,7 @@ cin>>plik_zaszyfrowany;
 cout<<"Podaj haslo tylko duze litery, bez spacji i znakow specjalnych: " ;
 cin>>haslo;
  
-int pozycja=0;
+int pozycja=3;
 for (i=0; i<200; i++)
 if (haslo[pozycja]!=42)
 {
