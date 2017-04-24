@@ -4,6 +4,7 @@ unsigned long long m;
 unsigned long long a;
 unsigned long long c;
 unsigned long long x;
+unsigned long long z;
  
 // Calculate a*x mod m
 unsigned long long mult(unsigned long long a, unsigned long long  x, unsigned long long m)

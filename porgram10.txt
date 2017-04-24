@@ -48,6 +48,7 @@ begin
 flaga:=true;
 while flaga do
 begin
+end
 flaga:=false;
 for k:=1 to p-1 do
 if E[0,k,j]>E[0,k+1,j] then

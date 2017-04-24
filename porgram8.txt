@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<iostream.h>
 #include <math.h>
+#include <stdlib.h>
  
 //W przypadku gdy szyfrowany tekst lub haslo posiadaja dlugosc > niz 200 znakow nalezy
 //powiekszyc rozmiar tablic: tablica_ASCII, haslo.

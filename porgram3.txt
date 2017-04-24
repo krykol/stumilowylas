@@ -30,7 +30,7 @@ tab_wynikowa[k] = tab[i];
 }
 else {
 tab_wynikowa[k] = tab2[j];
-++j;
+j++;
 }
 }
  

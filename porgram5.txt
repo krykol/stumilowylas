@@ -25,6 +25,7 @@ typedef struct RGBColors
 Byte r;
 Byte g;
 Byte b;
+Byte f;
 } TRGBColors;
 TRGBColors colors[121];
 //---------------------------------------------------------------------------

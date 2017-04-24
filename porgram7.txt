@@ -1,9 +1,4 @@
-/**
-* Implementacja algorytmu Dijkstry do znajdowania najkrotszych sciezek w grafie
-* z krawedzami o nieujemnych wagach.
-*
-* created by mephisto
-* www.algorytm.org
+
 */
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,8 +10,7 @@ import java.util.Queue;
 /**
 * Krawedz grafu skierowanego. Zawiera informacje od ktorej do ktorej krawedzi
 * jest poprowadzona krawedz oraz zawiera jej wage(np. dlugosc, czas itd).
-*
-* @author mephisto
+
 */
 class DirectedEdge {
 // wierzcholek zrodlowy
