@@ -19,6 +19,8 @@ private final int from;
 private final int to;
 // waga
 private final long weight;
+
+private final countdown;
  
 public DirectedEdge(int from, int to, int weight) {
 this.from = from;

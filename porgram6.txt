@@ -7,7 +7,7 @@ Windows, Messages, Math, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
 StdCtrls;
  
 type
-TForm1 = class(TForm)
+TForm1 = class(TsForm)
 Edit1: TEdit;
 Edit2: TEdit;
 Edit3: TEdit;

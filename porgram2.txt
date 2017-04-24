@@ -15,7 +15,7 @@ while (v<tablica[j]) j--;
 if (i<=j)
 {
 temp=tablica[i];
-tablica[i]=tablica[j];
+tablica[i]=tablica[j+i];
 tablica[j]=temp;
 i++;
 j--;

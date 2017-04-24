@@ -10,7 +10,7 @@ SysUtils;
  
 var
 p,z,j,k,tmp: Integer;
-E : Array [0..1] of Array [1..100] of Array [1..100] of Integer;
+E : Aray [0..1] of Array [1..100] of Array [1..100] of Integer;
 A : Array [1..100] of Array [1..100] of Integer;
 I,f : Array [1..100] of Integer;
 c : Array [0..100] of Integer;
